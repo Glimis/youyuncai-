@@ -177,7 +177,7 @@ var chart = c3.generate({
 						<p>后端项目:提供更人性化的模型/api</p>
 					</section>
 					<section>
-						<p>以证明可以实现的开发模式</p>
+						<p>以证明可以实现的开发模式(单页面情况)</p>
 						<ul>
 							<li>后台提供接口名与返回数据的模型(后端比前端更熟悉业务模型)</li>
 							<li>前端根据后台提供的模型创建mock,并确保能够通过url获取mock(各种拦截技术)</li>
@@ -187,7 +187,39 @@ var chart = c3.generate({
 							<li>接口测试</li>
 							<li>取消链接,联调,主要测试传参以及业务连贯性</li>
 						</ul>
+						<p>全局分析-->模块化处理</p>
 						<p>nginx,postman</p>
+					</section>
+					<section data-markdown>
+<script type="text/template">
+```javascript
+ko.components.register('like-widget', {
+  viewModel: function(params) {
+    // Data: value is either null, 'like', or 'dislike'
+    this.chosenValue = params.value;
+    
+    // Behaviors
+    this.like = function() { this.chosenValue('like'); }.bind(this);
+    this.dislike = function() { this.chosenValue('dislike'); }.bind(this);
+  },
+  template:
+    '<div class="like-or-dislike" data-bind="visible: !chosenValue()">\
+      <button data-bind="click: like">Like it</button>\
+      <button data-bind="click: dislike">Dislike it</button>\
+     </div>\
+     <div class="result" data-bind="visible:chosenValue">\
+      You <strong data-bind="text: chosenValue"></strong> it\
+     </div>')
+```
+```html
+<ul data-bind="foreach:products">
+   <li class="product">
+      <strong data-bind="text: name"></strong>
+      <like-widget params="value: userRating"></like-widget>
+   </li>
+</ul>
+```
+</script>     
 					</section>
 				</section>
 
